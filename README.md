@@ -83,4 +83,3 @@ https://render.com/images/deploy-to-render-button.svg
 📄 License
 
 MIT © asmaaaaaa
-<p align="center"> <b>Made with 💕 by [Your Name]</b> <br> <i>⭐ Star this repo if you like it! ⭐</i> </p> 
