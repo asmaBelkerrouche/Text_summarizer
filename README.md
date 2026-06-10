@@ -34,7 +34,7 @@ markdown
 
 ```bash
 # 1. Clone & enter
-git clone https://github.com/yourusername/text-summarizer.git
+git clone https://github.com/asmabelkerrouche/text-summarizer.git
 cd text-summarizer
 
 # 2. Create virtual environment
