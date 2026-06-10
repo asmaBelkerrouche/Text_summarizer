@@ -1,6 +1,6 @@
 markdown
 
-# <p align="center">🎀✨ Text Summarizer ✨🎀</p>
+# <p align="center">Text Summarizer</p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.12-ff69b4.svg">
@@ -10,31 +10,31 @@ markdown
 </p>
 
 <p align="center">
-  <b>🌸 Turn long text into short, sweet summaries 🌸</b>
+  <b>Turn long text into short, sweet summaries</b>
   <br>
-  <i>Fast • Cute • Production-Ready</i>
+  <i>Fast • Production-Ready</i>
 </p>
 
 ---
 
-## 🎯 Features
+## Features
 
 | Feature | Description |
 |---------|-------------|
-| 📝 **Text Summarization** | TextRank + LSA algorithms |
-| 📁 **File Upload** | PDF, DOCX, TXT support |
-| 🌐 **URL Extraction** | Summarize any article |
-| 🔑 **Keyword Extraction** | Automatic topic detection |
-| 🌓 **Dark/Light Mode** | Eye-friendly interface |
-| ⚡ **Caching** | 10x faster repeated requests |
+| Text Summarization | TextRank + LSA algorithms |
+| File Upload | PDF, DOCX, TXT support |
+| URL Extraction | Summarize any article |
+| Keyword Extraction | Automatic topic detection |
+| Dark/Light Mode | Eye-friendly interface |
+| Caching | 10x faster repeated requests |
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 # 1. Clone & enter
-git clone https://github.com/asmabelkerrouche/text-summarizer.git
+git clone https://github.com/asmaBelkerrouche/text-summarizer.git
 cd text-summarizer
 
 # 2. Create virtual environment
@@ -52,7 +52,7 @@ python -m spacy download en_core_web_sm
 python app.py
 
 Open: http://localhost:5000
-📡 API Endpoints
+API Endpoints
 bash
 
 POST /api/summarize      # Text summarization
@@ -60,7 +60,7 @@ POST /api/summarize-file # File upload
 POST /api/summarize-url  # URL extraction
 GET  /api/health         # Health check
 
-🛠️ Tech Stack
+Tech Stack
 
     Flask - Backend framework
 
@@ -72,14 +72,12 @@ GET  /api/health         # Health check
 
     HTML/CSS/JS - Modern UI
 
-📊 Performance
+Performance
 Text Size	Time	Cached
 200 words	0.3s	0.05s
 1000 words	0.8s	0.05s
 5000 words	2.1s	0.05s
-🚢 Deployment
 
-https://render.com/images/deploy-to-render-button.svg
-📄 License
 
-MIT © asmaaaaaa
+
+MIT © esloqeeus
