@@ -37,7 +37,8 @@
 - Extracted keywords
 - Processing time metrics
 
-## 🏗️ Architecture┌─────────────────────────────────────────────────────────┐
+## 🏗️ Architecture
+┌─────────────────────────────────────────────────────────┐
 │ Frontend (HTML/CSS/JS) │
 │ Modern UI with Dark Mode │
 └─────────────────────┬───────────────────────────────────┘
@@ -73,7 +74,7 @@ Installation
 bash
 
 # 1. Clone the repository
-git clone https://github.com/yourusername/text-summarizer.git
+git clone https://github.com/asmabelkerrouche/text-summarizer.git
 cd text-summarizer
 
 # 2. Create virtual environment
@@ -341,7 +342,6 @@ Also create a `LICENSE` file (MIT License):
 ```markdown
 MIT License
 
-Copyright (c) 2024 [Your Name]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
