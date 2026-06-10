@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Text Summarizer | AI-Powered Text Summarization</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <i class="fas fa-compress-alt"></i>
+                <h1>Text Summarizer <span>Pro</span></h1>
+            </div>
+            <div class="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Input Method Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="text">
+                    <i class="fas fa-paragraph"></i> Text
+                </button>
+                <button class="tab-btn" data-tab="file">
+                    <i class="fas fa-file-alt"></i> File
+                </button>
+                <button class="tab-btn" data-tab="url">
+                    <i class="fas fa-link"></i> URL
+                </button>
+            </div>
+
+            <!-- Text Input Tab -->
+            <div class="tab-content active" id="text-tab">
+                <textarea id="input-text" placeholder="Paste your text here... (min 20 words, max 10,000 words)"></textarea>
+                <div class="textarea-footer">
+                    <span id="word-count">0 words</span>
+                    <span id="char-count">0 characters</span>
+                </div>
+            </div>
+
+            <!-- File Upload Tab -->
+            <div class="tab-content" id="file-tab">
+                <div class="upload-area" id="upload-area">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Drag & drop or click to upload</p>
+                    <small>Supports: TXT, PDF, DOCX (Max 16MB)</small>
+                    <input type="file" id="file-input" accept=".txt,.pdf,.docx" hidden>
+                </div>
+                <div id="file-info" class="file-info hidden"></div>
+            </div>
+
+            <!-- URL Tab -->
+            <div class="tab-content" id="url-tab">
+                <div class="url-input">
+                    <input type="url" id="url-input" placeholder="https://example.com/article">
+                    <button id="fetch-url-btn" class="btn-secondary">
+                        <i class="fas fa-download"></i> Fetch
+                    </button>
+                </div>
+                <div id="url-preview" class="url-preview hidden"></div>
+            </div>
+
+            <!-- Settings Panel -->
+            <div class="settings-panel">
+                <div class="setting-group">
+                    <label>Summarization Method</label>
+                    <select id="method-select">
+                        <option value="textrank">TextRank (Extractive) - Fast & Accurate</option>
+                        <option value="lsa">LSA (Latent Semantic Analysis)</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label>Summary Length: <span id="ratio-value">30</span>%</label>
+                    <input type="range" id="ratio-slider" min="10" max="50" value="30" step="5">
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button id="summarize-btn" class="btn-primary">
+                    <i class="fas fa-magic"></i> Generate Summary
+                </button>
+                <button id="clear-btn" class="btn-secondary">
+                    <i class="fas fa-eraser"></i> Clear
+                </button>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div id="loading" class="loading hidden">
+                <div class="spinner"></div>
+                <p>Processing your text with AI...</p>
+            </div>
+
+            <!-- Results Section -->
+            <div id="results" class="results hidden">
+                <div class="results-header">
+                    <h2><i class="fas fa-star"></i> AI Summary</h2>
+                    <div class="results-actions">
+                        <button id="copy-btn" class="icon-btn" title="Copy to clipboard">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                        <button id="download-txt-btn" class="icon-btn" title="Download as TXT">
+                            <i class="fas fa-file-text"></i>
+                        </button>
+                        <button id="download-pdf-btn" class="icon-btn" title="Download as PDF">
+                            <i class="fas fa-file-pdf"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-file-alt"></i>
+                        <div>
+                            <div class="stat-label">Original</div>
+                            <div class="stat-value" id="original-stats">0 words</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-compress"></i>
+                        <div>
+                            <div class="stat-label">Summary</div>
+                            <div class="stat-value" id="summary-stats">0 words</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-chart-line"></i>
+                        <div>
+                            <div class="stat-label">Compression</div>
+                            <div class="stat-value" id="compression-stats">0%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="keywords-section">
+                    <h3><i class="fas fa-tags"></i> Key Topics</h3>
+                    <div id="keywords-list" class="keywords-list"></div>
+                </div>
+                
+                <div class="summary-content" id="summary-content"></div>
+                
+                <div class="feedback-section">
+                    <p>Was this summary helpful?</p>
+                    <button class="feedback-btn" data-feedback="yes">👍 Yes</button>
+                    <button class="feedback-btn" data-feedback="no">👎 No</button>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Powered by SpaCy, TextRank & AI | © 2024 Text Summarizer Pro</p>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        // DOM Elements
+        const tabs = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const inputText = document.getElementById('input-text');
+        const wordCount = document.getElementById('word-count');
+        const charCount = document.getElementById('char-count');
+        const summarizeBtn = document.getElementById('summarize-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const loading = document.getElementById('loading');
+        const results = document.getElementById('results');
+        const methodSelect = document.getElementById('method-select');
+        const ratioSlider = document.getElementById('ratio-slider');
+        const ratioValue = document.getElementById('ratio-value');
+        const fileInput = document.getElementById('file-input');
+        const uploadArea = document.getElementById('upload-area');
+        const fileInfo = document.getElementById('file-info');
+        const urlInput = document.getElementById('url-input');
+        const fetchUrlBtn = document.getElementById('fetch-url-btn');
+        const urlPreview = document.getElementById('url-preview');
+
+        let currentText = '';
+        let currentFilename = '';
+        let currentUrl = '';
+
+        // Theme Toggle
+        const themeToggle = document.querySelector('.theme-toggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        });
+
+        // Load saved theme
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+
+        // Word & Character Count
+        inputText.addEventListener('input', () => {
+            const text = inputText.value;
+            const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+            const chars = text.length;
+            wordCount.textContent = `${words} words`;
+            charCount.textContent = `${chars} characters`;
+            
+            if (words > 10000) {
+                wordCount.style.color = 'red';
+            } else {
+                wordCount.style.color = '';
+            }
+        });
+
+        // Ratio Slider
+        ratioSlider.addEventListener('input', () => {
+            ratioValue.textContent = ratioSlider.value;
+        });
+
+        // Tab Switching
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.dataset.tab;
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+            });
+        });
+
+        // File Upload
+        uploadArea.addEventListener('click', () => fileInput.click());
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file) handleFile(file);
+        });
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files[0]) handleFile(e.target.files[0]);
+        });
+
+        function handleFile(file) {
+            const validTypes = ['text/plain', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+            if (!validTypes.includes(file.type)) {
+                alert('Invalid file type. Please upload TXT, PDF, or DOCX.');
+                return;
+            }
+            currentFilename = file.name;
+            fileInfo.innerHTML = `<i class="fas fa-check-circle"></i> Selected: ${file.name}`;
+            fileInfo.classList.remove('hidden');
+        }
+
+        // URL Fetch
+        fetchUrlBtn.addEventListener('click', async () => {
+            const url = urlInput.value.trim();
+            if (!url) {
+                alert('Please enter a URL');
+                return;
+            }
+            
+            loading.classList.remove('hidden');
+            try {
+                const response = await fetch('/api/summarize-url', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url, method: methodSelect.value, ratio: ratioSlider.value / 100 })
+                });
+                const data = await response.json();
+                loading.classList.add('hidden');
+                
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+                
+                currentUrl = url;
+                urlPreview.innerHTML = `<strong>${data.title || 'Article'}</strong><br>${data.url}`;
+                urlPreview.classList.remove('hidden');
+                
+                displayResults(data);
+            } catch (error) {
+                loading.classList.add('hidden');
+                alert('Failed to fetch URL content');
+            }
+        });
+
+        // Summarize Button
+        summarizeBtn.addEventListener('click', async () => {
+            let text = '';
+            let isFile = false;
+            let isUrl = false;
+            
+            const activeTab = document.querySelector('.tab-btn.active').dataset.tab;
+            
+            if (activeTab === 'text') {
+                text = inputText.value.trim();
+                if (!text) {
+                    alert('Please enter some text to summarize');
+                    return;
+                }
+                const words = text.split(/\s+/).length;
+                if (words < 20) {
+                    alert('Text is too short. Minimum 20 words required.');
+                    return;
+                }
+                if (words > 10000) {
+                    alert('Text is too long. Maximum 10,000 words.');
+                    return;
+                }
+            } else if (activeTab === 'file') {
+                if (!fileInput.files[0]) {
+                    alert('Please select a file');
+                    return;
+                }
+                isFile = true;
+            } else if (activeTab === 'url') {
+                if (!currentUrl && !urlPreview.classList.contains('hidden')) {
+                    alert('Please fetch a URL first');
+                    return;
+                }
+                isUrl = true;
+            }
+            
+            loading.classList.remove('hidden');
+            results.classList.add('hidden');
+            
+            try {
+                let response;
+                if (isFile) {
+                    const formData = new FormData();
+                    formData.append('file', fileInput.files[0]);
+                    formData.append('method', methodSelect.value);
+                    formData.append('ratio', ratioSlider.value / 100);
+                    response = await fetch('/api/summarize-file', {
+                        method: 'POST',
+                        body: formData
+                    });
+                } else if (isUrl && currentUrl) {
+                    response = await fetch('/api/summarize-url', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url: currentUrl, method: methodSelect.value, ratio: ratioSlider.value / 100 })
+                    });
+                } else {
+                    response = await fetch('/api/summarize', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            text, 
+                            method: methodSelect.value, 
+                            ratio: ratioSlider.value / 100 
+                        })
+                    });
+                }
+                
+                const data = await response.json();
+                loading.classList.add('hidden');
+                
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+                
+                displayResults(data);
+            } catch (error) {
+                loading.classList.add('hidden');
+                alert('An error occurred. Please try again.');
+            }
+        });
+
+        function displayResults(data) {
+            currentText = data.summary;
+            
+            document.getElementById('original-stats').textContent = `${data.original_length || 0} words`;
+            document.getElementById('summary-stats').textContent = `${data.summary_length || 0} words`;
+            document.getElementById('compression-stats').textContent = `${data.compression || 0}%`;
+            document.getElementById('summary-content').innerHTML = data.summary.replace(/\n/g, '<br>');
+            
+            const keywordsDiv = document.getElementById('keywords-list');
+            if (data.keywords && data.keywords.length) {
+                keywordsDiv.innerHTML = data.keywords.map(k => `<span class="keyword">${k}</span>`).join('');
+            } else {
+                keywordsDiv.innerHTML = '<p>No keywords extracted</p>';
+            }
+            
+            results.classList.remove('hidden');
+            results.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Copy Button
+        document.getElementById('copy-btn').addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(currentText);
+                const btn = document.getElementById('copy-btn');
+                btn.innerHTML = '<i class="fas fa-check"></i>';
+                setTimeout(() => btn.innerHTML = '<i class="fas fa-copy"></i>', 2000);
+            } catch (err) {
+                alert('Failed to copy text');
+            }
+        });
+
+        // Download TXT
+        document.getElementById('download-txt-btn').addEventListener('click', () => {
+            const blob = new Blob([currentText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `summary_${Date.now()}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        // Download PDF
+        document.getElementById('download-pdf-btn').addEventListener('click', () => {
+            const element = document.getElementById('summary-content');
+            const opt = {
+                margin: 1,
+                filename: `summary_${Date.now()}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+        });
+
+        // Clear Button
+        clearBtn.addEventListener('click', () => {
+            inputText.value = '';
+            wordCount.textContent = '0 words';
+            charCount.textContent = '0 characters';
+            fileInput.value = '';
+            fileInfo.classList.add('hidden');
+            urlInput.value = '';
+            urlPreview.classList.add('hidden');
+            currentUrl = '';
+            results.classList.add('hidden');
+        });
+
+        // Feedback
+        document.querySelectorAll('.feedback-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const feedback = btn.dataset.feedback;
+                console.log('Feedback:', feedback);
+                btn.style.opacity = '0.5';
+                setTimeout(() => {
+                    alert('Thank you for your feedback!');
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>
