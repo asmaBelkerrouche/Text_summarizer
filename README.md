@@ -1,3 +1,5 @@
+markdown
+
 # <p align="center">🎀✨ Text Summarizer ✨🎀</p>
 
 <p align="center">
@@ -48,8 +50,8 @@ python -m spacy download en_core_web_sm
 
 # 5. Run
 python app.py
-Open: http://localhost:5000
 
+Open: http://localhost:5000
 📡 API Endpoints
 bash
 
